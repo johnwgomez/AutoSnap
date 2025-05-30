@@ -1,0 +1,54 @@
+/* reset some basic browser defaults */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* basic body styling */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* simple form styles */
+.auth-container {
+  max-width: 400px;
+  margin: 4rem auto;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+.auth-form {
+  display: flex;
+  flex-direction: column;
+}
+.auth-form input {
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.auth-form button {
+  padding: 0.75rem;
+  background: #005faf;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.auth-form button:disabled {
+  background: #999;
+  cursor: not-allowed;
+}
+.toggle-link {
+  text-align: center;
+  margin-top: 1rem;
+}
+.error {
+  color: #c00;
+  margin-top: 0.5rem;
+}

@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 const express = require('express');
+const jwt = require ('jsonwebtoken');
 const { ApolloServer } = require('apollo-server-express');
 const path = require('path');
 const db = require('./config/connection');
@@ -26,6 +27,25 @@ const startServer = async () => {
     typeDefs,
     resolvers,
     // context: authMiddleware (optional***** when ready)
+    context: ({ req }) => {
+    // Grab the raw "Authorization" header (e.g. "Bearer abc.def.ghi")
+     const authHeader = req.headers.authorization || '';
+     const token = authHeader.startsWith('Bearer ')
+       ? authHeader.split(' ')[1]
+       : authHeader;
+
+     if (!token) {
+       return {}; // no token sent, no user in context
+     }
+
+     try {
+       // Verify & decode; if invalid, this will throw
+       const user = jwt.verify(token, process.env.JWT_SECRET);
+       return { user }; // make `context.user` available inside resolvers
+    } catch {
+       return {}; // invalid token → context without `user`
+     }
+  }
   });
 
   await server.start();

@@ -7,6 +7,15 @@ function generateToken(payload, expiresIn = '1h') {
   return jwt.sign(payload, SECRET_KEY, { expiresIn });
 }
 
+function signToken(user) {
+  const payload = {
+    _id: user._id,
+    email: user.email,
+    username: user.username,
+  };
+  return generateToken(payload);
+}
+
 // Middleware to verify JWT token
 function authenticateToken(req, res, next) {
   const authHeader = req.headers['authorization'];
@@ -23,6 +32,5 @@ function authenticateToken(req, res, next) {
 module.exports = {
   generateToken,
   authenticateToken,
+  signToken,
 };
-
-// auth.js

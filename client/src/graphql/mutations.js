@@ -23,3 +23,16 @@ export const SIGNUP_USER = gql`
     }
   }
 `;
+
+export const ADD_CAR = gql`
+  mutation AddCar($make: String!, $model: String!, $year: Int!, $price: Float!, $description: String!) {
+    addCar(make: $make, model: $model, year: $year, price: $price, description: $description) {
+      _id
+      make
+      model
+      year
+      price
+      description
+    }
+  }
+`;

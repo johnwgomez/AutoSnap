@@ -7,7 +7,7 @@ import Login    from './pages/Login';
 import Signup   from './pages/Signup';
 import Feed     from './pages/Feed';
 import AddCar   from './pages/AddCar';
-import MyGarage from './pages/MyGarage'; // if you have or will create it
+import MyGarage from './pages/MyGarage'; 
 
 export default function App() {
   return (

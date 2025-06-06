@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { useNavigate, Link } from 'react-router-dom';
 import { SIGNUP_USER } from '../graphql/mutations';
+import { setToken } from '../utils/auth';
 
 export default function Signup() {
   const [formState, setFormState] = useState({
@@ -18,8 +19,11 @@ export default function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      
       const { data } = await addUser({ variables: { ...formState } });
-      localStorage.setItem('token', data.addUser.token);
+     setToken(data.addUser.token);
+     // Save the username so Navbar can display it:
+     localStorage.setItem('username', data.addUser.user.username);
       navigate('/feed');
     } catch (err) {
       console.error(err);

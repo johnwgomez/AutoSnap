@@ -4,7 +4,7 @@ import { setContext } from '@apollo/client/link/context';
 import { getToken } from './auth'; // ← our newly created utility
 
 const httpLink = createHttpLink({
-  uri: process.env.REACT_APP_GRAPHQL_ENDPOINT, // will come from .env
+  uri: 'REACT_APP_GRAPHQL_ENDPOINT', // will come from .env
 });
 
 const authLink = setContext((_, { headers }) => {

@@ -1,3 +1,4 @@
+// client/src/pages/AddCar.jsx
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { ADD_CAR } from '../graphql/mutations';
@@ -10,14 +11,16 @@ export default function AddCar() {
     year: 2010,
     price: 1000,
     description: '',
-    images: [],
   });
-  const [previewImages, setPreviewImages] = useState([]);
+
   const [addCar, { loading, error }] = useMutation(ADD_CAR, {
-    refetchQueries: ['getAllCars', 'getMyCars']
+    // After adding, automatically refetch GET_MY_CARS so MyGarage is fresh
+    refetchQueries: ['GetMyCars'],
   });
+
   const navigate = useNavigate();
 
+  // Handle text/range changes
   const handleChange = (e) => {
     const { name, value, type } = e.target;
     setFormState({
@@ -26,12 +29,7 @@ export default function AddCar() {
     });
   };
 
-  const handleImageChange = (e) => {
-    const files = Array.from(e.target.files);
-    setFormState({ ...formState, images: files });
-    setPreviewImages(files.map(file => URL.createObjectURL(file)));
-  };
-
+  // On submit, call the ADD_CAR mutation
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -42,12 +40,12 @@ export default function AddCar() {
           year: formState.year,
           price: formState.price,
           description: formState.description,
-          // images: handle image upload and get URLs before sending
-        }
+        },
       });
-      navigate('/garage');
+      // Navigate to MyGarage so user sees their new car
+      navigate('/mygarage');
     } catch (err) {
-      console.error(err);
+      console.error('AddCar mutation error:', err);
     }
   };
 
@@ -55,6 +53,7 @@ export default function AddCar() {
     <div className="container mt-5">
       <form onSubmit={handleSubmit} className="card p-4 shadow-sm">
         <h2 className="mb-4">Add a Car</h2>
+
         <div className="mb-3">
           <input
             name="make"
@@ -65,6 +64,7 @@ export default function AddCar() {
             required
           />
         </div>
+
         <div className="mb-3">
           <input
             name="model"
@@ -75,6 +75,7 @@ export default function AddCar() {
             required
           />
         </div>
+
         <div className="mb-3">
           <label className="form-label">
             Year: <strong>{formState.year}</strong>
@@ -90,6 +91,7 @@ export default function AddCar() {
             className="form-range"
           />
         </div>
+
         <div className="mb-3">
           <label className="form-label">
             Price: <strong>${formState.price.toLocaleString()}</strong>
@@ -105,6 +107,7 @@ export default function AddCar() {
             className="form-range"
           />
         </div>
+
         <div className="mb-3">
           <textarea
             name="description"
@@ -116,35 +119,21 @@ export default function AddCar() {
             rows={3}
           />
         </div>
-        <div className="mb-3">
-          <label className="form-label">
-            Car Images
-            <input
-              type="file"
-              multiple
-              accept="image/*"
-              onChange={handleImageChange}
-              className="form-control mt-2"
-            />
-          </label>
-        </div>
-        <div className="mb-3 d-flex gap-2 flex-wrap">
-          {previewImages.map((src, idx) => (
-            <img
-              key={idx}
-              src={src}
-              alt={`preview ${idx}`}
-              style={{ width: 60, height: 60, objectFit: 'cover', borderRadius: 8 }}
-            />
-          ))}
-        </div>
-        <button type="submit" className="btn btn-primary" disabled={loading}>
+
+        <button
+          type="submit"
+          className="btn btn-primary"
+          disabled={loading}
+        >
           {loading ? 'Adding…' : 'Add Car'}
         </button>
-        {error && <p className="text-danger mt-2">{error.message}</p>}
+
+        {error && (
+          <p className="text-danger mt-2">
+            Error adding car: {error.message}
+          </p>
+        )}
       </form>
     </div>
   );
 }
-
-// AddCar.jsx

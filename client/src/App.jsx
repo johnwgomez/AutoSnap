@@ -1,19 +1,30 @@
+// client/src/App.jsx
 import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 
-import Login from './pages/Login';
-import Signup from './pages/Signup';
-import Feed from './pages/Feed'; // you should have a stub Feed.jsx in pages/
-import AddCar from './pages/AddCar';
+import Navbar   from './components/Navbar';
+import Login    from './pages/Login';
+import Signup   from './pages/Signup';
+import Feed     from './pages/Feed';
+import AddCar   from './pages/AddCar';
+import MyGarage from './pages/MyGarage'; // if you have or will create it
 
 export default function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Navigate to="/login" replace />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<Signup />} />
-      <Route path="/feed" element={<Feed />} />
-      <Route path="/addcar" element={<AddCar />} />
-    </Routes>
+    <>
+      {/* Always show the navbar at the top */}
+      <Navbar />
+
+      {/* Define your routes below */}
+      <Routes>
+        {/* "/" now goes to the Feed page */}
+        <Route path="/" element={<Feed />} />
+        <Route path="/login"  element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/feed"   element={<Feed />} />
+        <Route path="/addcar" element={<AddCar />} />
+        <Route path="/mygarage" element={<MyGarage />} />
+      </Routes>
+    </>
   );
 }

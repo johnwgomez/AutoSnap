@@ -49,7 +49,7 @@ Implemented queries and mutations for:
 
 ## 🔗 Links
 
-- [Live App on Render](https://your-render-link)
+- [Live App on Render](autosnap.onrender.com)
 - [GitHub Repository](https://github.com/johnwgomez/AutoSnap)
 
 ## 📸 Screenshots

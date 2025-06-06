@@ -52,25 +52,33 @@ export default function AddCar() {
   };
 
   return (
-    <div className="auth-container">
-      <form onSubmit={handleSubmit} className="auth-form">
-        <h2>Add a Car</h2>
-        <input
-          name="make"
-          placeholder="Make"
-          value={formState.make}
-          onChange={handleChange}
-          required
-        />
-        <input
-          name="model"
-          placeholder="Model"
-          value={formState.model}
-          onChange={handleChange}
-          required
-        />
-        <label style={{ marginBottom: '1rem' }}>
-          Year: <strong>{formState.year}</strong>
+    <div className="container mt-5">
+      <form onSubmit={handleSubmit} className="card p-4 shadow-sm">
+        <h2 className="mb-4">Add a Car</h2>
+        <div className="mb-3">
+          <input
+            name="make"
+            className="form-control"
+            placeholder="Make"
+            value={formState.make}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="mb-3">
+          <input
+            name="model"
+            className="form-control"
+            placeholder="Model"
+            value={formState.model}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div className="mb-3">
+          <label className="form-label">
+            Year: <strong>{formState.year}</strong>
+          </label>
           <input
             name="year"
             type="range"
@@ -79,11 +87,13 @@ export default function AddCar() {
             step={1}
             value={formState.year}
             onChange={handleChange}
-            style={{ width: '100%' }}
+            className="form-range"
           />
-        </label>
-        <label style={{ marginBottom: '1rem' }}>
-          Price: <strong>${formState.price.toLocaleString()}</strong>
+        </div>
+        <div className="mb-3">
+          <label className="form-label">
+            Price: <strong>${formState.price.toLocaleString()}</strong>
+          </label>
           <input
             name="price"
             type="range"
@@ -92,27 +102,33 @@ export default function AddCar() {
             step={1000}
             value={formState.price}
             onChange={handleChange}
-            style={{ width: '100%' }}
+            className="form-range"
           />
-        </label>
-        <textarea
-          name="description"
-          placeholder="Description"
-          value={formState.description}
-          onChange={handleChange}
-          required
-        />
-        <label>
-          Car Images
-          <input
-            type="file"
-            multiple
-            accept="image/*"
-            onChange={handleImageChange}
-            style={{ marginTop: '0.5rem' }}
+        </div>
+        <div className="mb-3">
+          <textarea
+            name="description"
+            className="form-control"
+            placeholder="Description"
+            value={formState.description}
+            onChange={handleChange}
+            required
+            rows={3}
           />
-        </label>
-        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '1rem' }}>
+        </div>
+        <div className="mb-3">
+          <label className="form-label">
+            Car Images
+            <input
+              type="file"
+              multiple
+              accept="image/*"
+              onChange={handleImageChange}
+              className="form-control mt-2"
+            />
+          </label>
+        </div>
+        <div className="mb-3 d-flex gap-2 flex-wrap">
           {previewImages.map((src, idx) => (
             <img
               key={idx}
@@ -122,10 +138,10 @@ export default function AddCar() {
             />
           ))}
         </div>
-        <button type="submit" disabled={loading}>
+        <button type="submit" className="btn btn-primary" disabled={loading}>
           {loading ? 'Adding…' : 'Add Car'}
         </button>
-        {error && <p className="error">{error.message}</p>}
+        {error && <p className="text-danger mt-2">{error.message}</p>}
       </form>
     </div>
   );

@@ -64,6 +64,7 @@ export default function AddCar() {
       <form onSubmit={handleSubmit} className="card p-4 shadow-sm">
         <h2 className="mb-4">Add a Car</h2>
 
+
         {/* Make/Model */}
         <input
           name="make"
@@ -131,6 +132,7 @@ export default function AddCar() {
             style={{ width: 120, height: 80, objectFit: 'cover' }}
           />
         )}
+
 
         <button type="submit" className="btn btn-primary" disabled={loading}>
           {loading ? 'Adding…' : 'Add Car'}

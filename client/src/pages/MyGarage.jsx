@@ -24,6 +24,7 @@ export default function MyGarage() {
     }
   };
 
+
   if (loading) return <p className="text-center py-5">Loading cars…</p>;
   if (error) return <p className="text-center text-danger py-5">Error loading cars.</p>;
   if (!data.getMyCars.length)
@@ -44,6 +45,7 @@ export default function MyGarage() {
                 Delete
               </button>
             </div>
+
           </div>
         ))}
       </div>

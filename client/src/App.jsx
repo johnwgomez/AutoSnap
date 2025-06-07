@@ -1,5 +1,6 @@
 // client/src/App.jsx
 import React from 'react';
+
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ApolloProvider } from '@apollo/client';
 import client from './utils/ApolloClient';
@@ -13,8 +14,10 @@ import AddCar from './pages/AddCar';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 
+
 function App() {
   return (
+
     <ApolloProvider client={client}>
       <BrowserRouter>
         <Navbar />
@@ -38,6 +41,7 @@ function App() {
         </Routes>
       </BrowserRouter>
     </ApolloProvider>
+
   );
 }
 

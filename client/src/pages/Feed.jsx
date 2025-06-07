@@ -1,4 +1,3 @@
-// client/src/pages/Feed.jsx
 import React, { useState, useContext } from 'react';
 import { AppContext } from '../contexts/AppContext';
 import { FaRegSquare, FaCheckSquare, FaRegHeart, FaHeart } from 'react-icons/fa';
@@ -102,3 +101,4 @@ export default function Feed() {
     </div>
   );
 }
+

@@ -1,4 +1,5 @@
 // client/src/components/Navbar.jsx
+
 import React, { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AppContext } from '../contexts/AppContext';
@@ -27,17 +28,21 @@ export default function Navbar() {
           />
           <span className="navbar-brand-text">AutoSnap</span>
         </Link>
+
         <button
           className="navbar-toggler"
           type="button"
           data-bs-toggle="collapse"
+
           data-bs-target="#navContent"
           aria-controls="navContent"
+
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
           <span className="navbar-toggler-icon" />
         </button>
+
 
         <div className="collapse navbar-collapse" id="navContent">
           {/* Left‐side nav */}
@@ -67,9 +72,11 @@ export default function Navbar() {
             <li className="nav-item">
               <Link className="nav-link" to="/compare">
                 Compare {searchCompare.length > 0 && `(${searchCompare.length})`}
+
               </Link>
             </li>
           </ul>
+
 
           {/* Right‐side controls */}
           <ul className="navbar-nav ms-auto align-items-center">
@@ -102,6 +109,7 @@ export default function Navbar() {
                 </li>
               </>
             )}
+
           </ul>
         </div>
       </div>

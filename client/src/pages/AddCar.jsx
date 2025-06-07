@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { ADD_CAR } from '../graphql/mutations';
+import { GET_MY_CARS } from './MyGarage';  // for refetch
 import { useNavigate } from 'react-router-dom';
 
 export default function AddCar() {
@@ -11,41 +12,42 @@ export default function AddCar() {
     year: 2010,
     price: 1000,
     description: '',
+    image: '',
   });
+  const [imagePreview, setImagePreview] = useState('');
 
   const [addCar, { loading, error }] = useMutation(ADD_CAR, {
-    // After adding, automatically refetch GET_MY_CARS so MyGarage is fresh
-    refetchQueries: ['GetMyCars'],
+    refetchQueries: [{ query: GET_MY_CARS }],
+    awaitRefetchQueries: true,
   });
-
   const navigate = useNavigate();
 
-  // Handle text/range changes
   const handleChange = (e) => {
     const { name, value, type } = e.target;
-    setFormState({
-      ...formState,
-      [name]: type === 'range' ? Number(value) : value,
-    });
+    setFormState(prev => ({
+      ...prev,
+      [name]: type === 'range' ? Number(value) : value
+    }));
   };
 
-  // On submit, call the ADD_CAR mutation
-  const handleSubmit = async (e) => {
+  const handleImageChange = e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setFormState(prev => ({ ...prev, image: reader.result }));
+      setImagePreview(reader.result);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleSubmit = async e => {
     e.preventDefault();
     try {
-      await addCar({
-        variables: {
-          make: formState.make,
-          model: formState.model,
-          year: formState.year,
-          price: formState.price,
-          description: formState.description,
-        },
-      });
-      // Navigate to MyGarage so user sees their new car
+      await addCar({ variables: { ...formState } });
       navigate('/mygarage');
     } catch (err) {
-      console.error('AddCar mutation error:', err);
+      console.error('AddCar error:', err);
     }
   };
 
@@ -53,7 +55,6 @@ export default function AddCar() {
     <div className="container mt-5">
       <form onSubmit={handleSubmit} className="card p-4 shadow-sm">
         <h2 className="mb-4">Add a Car</h2>
-
         <div className="mb-3">
           <input
             name="make"
@@ -64,7 +65,6 @@ export default function AddCar() {
             required
           />
         </div>
-
         <div className="mb-3">
           <input
             name="model"
@@ -75,7 +75,6 @@ export default function AddCar() {
             required
           />
         </div>
-
         <div className="mb-3">
           <label className="form-label">
             Year: <strong>{formState.year}</strong>
@@ -91,7 +90,6 @@ export default function AddCar() {
             className="form-range"
           />
         </div>
-
         <div className="mb-3">
           <label className="form-label">
             Price: <strong>${formState.price.toLocaleString()}</strong>
@@ -107,7 +105,6 @@ export default function AddCar() {
             className="form-range"
           />
         </div>
-
         <div className="mb-3">
           <textarea
             name="description"
@@ -119,20 +116,28 @@ export default function AddCar() {
             rows={3}
           />
         </div>
-
-        <button
-          type="submit"
-          className="btn btn-primary"
-          disabled={loading}
-        >
+        <div className="mb-3">
+          <label className="form-label">Car Image</label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleImageChange}
+            className="form-control"
+          />
+        </div>
+        {imagePreview && (
+          <div className="mb-3 text-center">
+            <img
+              src={imagePreview}
+              alt="Preview"
+              style={{ maxWidth: '200px', borderRadius: '8px' }}
+            />
+          </div>
+        )}
+        <button type="submit" className="btn btn-primary" disabled={loading}>
           {loading ? 'Adding…' : 'Add Car'}
         </button>
-
-        {error && (
-          <p className="text-danger mt-2">
-            Error adding car: {error.message}
-          </p>
-        )}
+        {error && <p className="text-danger mt-2">{error.message}</p>}
       </form>
     </div>
   );

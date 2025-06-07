@@ -1,30 +1,44 @@
 // client/src/App.jsx
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { ApolloProvider } from '@apollo/client';
+import client from './utils/ApolloClient';
 
-import Navbar   from './components/Navbar';
-import Login    from './pages/Login';
-import Signup   from './pages/Signup';
-import Feed     from './pages/Feed';
-import AddCar   from './pages/AddCar';
-import MyGarage from './pages/MyGarage'; 
+import Navbar from './components/Navbar';
+import Feed from './pages/Feed';
+import Favorites from './pages/Favorites';
+import Compare from './pages/Compare';
+import MyGarage from './pages/MyGarage';
+import AddCar from './pages/AddCar';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
 
-export default function App() {
+function App() {
   return (
-    <>
-      {/* Always show the navbar at the top */}
-      <Navbar />
+    <ApolloProvider client={client}>
+      <BrowserRouter>
+        <Navbar />
+        <Routes>
+          {/* Brand– “/” now goes straight to Feed */}
+          <Route path="/" element={<Feed />} />
 
-      {/* Define your routes below */}
-      <Routes>
-        {/* "/" now goes to the Feed page */}
-        <Route path="/" element={<Feed />} />
-        <Route path="/login"  element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/feed"   element={<Feed />} />
-        <Route path="/addcar" element={<AddCar />} />
-        <Route path="/mygarage" element={<MyGarage />} />
-      </Routes>
-    </>
+          {/* User pages */}
+          <Route path="/feed" element={<Feed />} />
+          <Route path="/mygarage" element={<MyGarage />} />
+          <Route path="/addcar" element={<AddCar />} />
+          <Route path="/favorites" element={<Favorites />} />
+          <Route path="/compare" element={<Compare />} />
+
+          {/* Auth */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+
+          {/* Catch‐all → Feed */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </BrowserRouter>
+    </ApolloProvider>
   );
 }
+
+export default App;

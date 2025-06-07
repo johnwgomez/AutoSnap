@@ -12,8 +12,8 @@ const resolvers = require('./schemas/resolvers');
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
+app.use(express.urlencoded({ extended: false, limit : '10mb' }));
+app.use(express.json({ limit: '10mb'}));
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../client/build')));

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { useNavigate, Link } from 'react-router-dom';
 import { LOGIN_USER } from '../graphql/mutations';
+import {setToken } from '../utils/auth';
 
 export default function Login() {
   const [formState, setFormState] = useState({ email: '', password: '' });
@@ -14,9 +15,12 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      
       const { data } = await login({ variables: { ...formState } });
-      localStorage.setItem('token', data.login.token);
-      navigate('/feed');
+     setToken(data.login.token);
+     // Also save the username so Navbar can read it:
+     localStorage.setItem('username', data.login.user.username);
+     navigate('/feed');
     } catch (err) {
       console.error(err);
     }

@@ -1,21 +1,13 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
-import { createRoot } from 'react-dom/client';
-import { ApolloProvider } from '@apollo/client';
-import { BrowserRouter } from 'react-router-dom';
-
-import client from './utils/ApolloClient';
+import ReactDOM from 'react-dom/client';
 import App from './App';
+import { AppProvider } from './contexts/AppContext';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles/index.css';
 
-const container = document.getElementById('root');
-const root = createRoot(container);
+const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <ApolloProvider client={client}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </ApolloProvider>
-  </React.StrictMode>
+  <AppProvider>
+    <App />
+  </AppProvider>
 );

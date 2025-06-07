@@ -1,10 +1,11 @@
 // client/src/utils/ApolloClient.js
 import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
-import { getToken } from './auth'; // ← our newly created utility
+import { getToken } from './auth';
 
 const httpLink = createHttpLink({
-  uri: process.env.REACT_APP_GRAPHQL_ENDPOINT, // will come from .env
+  // Instead of "http://localhost:4000/graphql", just use "/graphql"
+  uri: '/graphql',
 });
 
 const authLink = setContext((_, { headers }) => {
@@ -12,15 +13,12 @@ const authLink = setContext((_, { headers }) => {
   return {
     headers: {
       ...headers,
-      // Only add the header if a token exists
       authorization: token ? `Bearer ${token}` : '',
     }
   };
 });
 
-const client = new ApolloClient({
+export default new ApolloClient({
   link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
 });
-
-export default client;

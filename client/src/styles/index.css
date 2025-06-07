@@ -1,36 +1,37 @@
-/* reset some basic browser defaults */
+/* client/src/styles/index.css */
+
+/* === Reset & Basic Styles === */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
-
-/* basic body styling */
 body {
   font-family: Arial, sans-serif;
-  background-color: #f9f9f9;
-  color: #333;
   line-height: 1.6;
 }
 
-/* simple form styles */
+/* === Auth Form Base Styles === */
 .auth-container {
   max-width: 400px;
   margin: 4rem auto;
   padding: 2rem;
-  background: #fff;
+  background: var(--bg-color);
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 .auth-form {
   display: flex;
   flex-direction: column;
 }
-.auth-form input {
+.auth-form input,
+.auth-form textarea {
   margin-bottom: 1rem;
   padding: 0.75rem;
   border: 1px solid #ccc;
   border-radius: 4px;
+  background: var(--bg-color);
+  color: var(--fg-color);
 }
 .auth-form button {
   padding: 0.75rem;
@@ -51,4 +52,78 @@ body {
 .error {
   color: #c00;
   margin-top: 0.5rem;
+}
+
+/* === Theme Variables === */
+:root {
+  --bg-color: #ffffff;
+  --fg-color: #212529;
+  --nav-link-color: #212529;
+  --btn-outline-color: #6c757d;
+}
+body.dark-mode {
+  --bg-color: #121212;
+  --fg-color: #ffffff;
+  --nav-link-color: #ffffff;
+  --btn-outline-color: #e1e1e1;
+}
+
+/* === Apply Theme === */
+body {
+  background-color: var(--bg-color) !important;
+  color: var(--fg-color) !important;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* override Bootstrap .bg-light */
+.bg-light {
+  background-color: var(--bg-color) !important;
+}
+
+/* cards, containers, auth-container */
+.container,
+.min-vh-100,
+.card,
+.auth-container {
+  background-color: var(--bg-color) !important;
+  color: var(--fg-color) !important;
+}
+
+/* === Navbar theming === */
+.navbar,
+.navbar-light {
+  background-color: var(--bg-color) !important;
+  transition: background-color 0.3s, color 0.3s;
+}
+/* Brand & links */
+.navbar .navbar-brand,
+.navbar .nav-link {
+  color: var(--nav-link-color) !important;
+}
+.navbar .navbar-brand:hover,
+.navbar .nav-link:hover {
+  color: var(--btn-outline-color) !important;
+}
+
+/* Toggle & Logout Buttons */
+.navbar .btn-outline-secondary {
+  border-color: var(--btn-outline-color) !important;
+  color: var(--nav-link-color) !important;
+}
+.navbar .btn-outline-secondary:hover {
+  background-color: var(--btn-outline-color) !important;
+  color: var(--bg-color) !important;
+}
+.navbar .btn-outline-danger {
+  border-color: #dc3545 !important;
+  color: #dc3545 !important;
+}
+.navbar .btn-outline-danger:hover {
+  background-color: #dc3545 !important;
+  color: #fff !important;
+}
+
+/* === Text Muted in Dark Mode === */
+body.dark-mode .text-muted {
+  color: var(--fg-color) !important;
 }

@@ -1,3 +1,4 @@
+// server/schemas/typeDefs.js
 const { gql } = require('apollo-server-express');
 
 const typeDefs = gql`
@@ -17,6 +18,9 @@ const typeDefs = gql`
     make: String
     model: String
     year: Int
+    price: Int!
+    description: String
+    image: String       # <-- only one image field here
     owner: User
   }
 
@@ -32,7 +36,15 @@ const typeDefs = gql`
     login(email: String!, password: String!): Auth
     signup(username: String!, email: String!, password: String!): Auth
 
-    addCar(make: String!, model: String!, year: Int!): Car
+    addCar(
+      make: String!
+      model: String!
+      year: Int!
+      price: Int!
+      description: String!
+      image: String       # <-- only one addCar definition
+    ): Car
+
     deleteCar(carId: ID!): Boolean
   }
 `;

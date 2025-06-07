@@ -1,6 +1,8 @@
+// client/src/pages/AddCar.jsx
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { ADD_CAR } from '../graphql/mutations';
+import { GET_MY_CARS } from '../graphql/queries';
 import { useNavigate } from 'react-router-dom';
 
 export default function AddCar() {
@@ -10,26 +12,32 @@ export default function AddCar() {
     year: 2010,
     price: 1000,
     description: '',
-    images: [],
+    image: null, // will hold Base64
   });
-  const [previewImages, setPreviewImages] = useState([]);
+  const [preview, setPreview] = useState(null);
+
   const [addCar, { loading, error }] = useMutation(ADD_CAR, {
-    refetchQueries: ['getAllCars', 'getMyCars']
+    refetchQueries: [{ query: GET_MY_CARS }],
   });
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value, type } = e.target;
-    setFormState({
-      ...formState,
+    setFormState((s) => ({
+      ...s,
       [name]: type === 'range' ? Number(value) : value,
-    });
+    }));
   };
 
   const handleImageChange = (e) => {
-    const files = Array.from(e.target.files);
-    setFormState({ ...formState, images: files });
-    setPreviewImages(files.map(file => URL.createObjectURL(file)));
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setFormState((s) => ({ ...s, image: reader.result }));
+      setPreview(reader.result);
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleSubmit = async (e) => {
@@ -42,10 +50,10 @@ export default function AddCar() {
           year: formState.year,
           price: formState.price,
           description: formState.description,
-          // images: handle image upload and get URLs before sending
-        }
+          image: formState.image,
+        },
       });
-      navigate('/garage');
+      navigate('/mygarage');
     } catch (err) {
       console.error(err);
     }
@@ -55,89 +63,77 @@ export default function AddCar() {
     <div className="container mt-5">
       <form onSubmit={handleSubmit} className="card p-4 shadow-sm">
         <h2 className="mb-4">Add a Car</h2>
-        <div className="mb-3">
-          <input
-            name="make"
-            className="form-control"
-            placeholder="Make"
-            value={formState.make}
-            onChange={handleChange}
-            required
+
+
+        {/* Make/Model */}
+        <input
+          name="make"
+          className="form-control mb-3"
+          placeholder="Make"
+          value={formState.make}
+          onChange={handleChange}
+          required
+        />
+        <input
+          name="model"
+          className="form-control mb-3"
+          placeholder="Model"
+          value={formState.model}
+          onChange={handleChange}
+          required
+        />
+
+        {/* Year & Price */}
+        <label>Year: {formState.year}</label>
+        <input
+          name="year"
+          type="range"
+          min={2010}
+          max={2025}
+          value={formState.year}
+          onChange={handleChange}
+          className="form-range mb-3"
+        />
+        <label>Price: ${formState.price.toLocaleString()}</label>
+        <input
+          name="price"
+          type="range"
+          min={1000}
+          max={500000}
+          step={1000}
+          value={formState.price}
+          onChange={handleChange}
+          className="form-range mb-3"
+        />
+
+        {/* Description */}
+        <textarea
+          name="description"
+          className="form-control mb-3"
+          placeholder="Description"
+          value={formState.description}
+          onChange={handleChange}
+          rows={3}
+        />
+
+        {/* Image Upload */}
+        <label className="form-label">Upload Image</label>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleImageChange}
+          className="form-control mb-3"
+        />
+        {preview && (
+          <img
+            src={preview}
+            alt="preview"
+            className="mb-3"
+            style={{ width: 120, height: 80, objectFit: 'cover' }}
           />
-        </div>
-        <div className="mb-3">
-          <input
-            name="model"
-            className="form-control"
-            placeholder="Model"
-            value={formState.model}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="mb-3">
-          <label className="form-label">
-            Year: <strong>{formState.year}</strong>
-          </label>
-          <input
-            name="year"
-            type="range"
-            min={2010}
-            max={2025}
-            step={1}
-            value={formState.year}
-            onChange={handleChange}
-            className="form-range"
-          />
-        </div>
-        <div className="mb-3">
-          <label className="form-label">
-            Price: <strong>${formState.price.toLocaleString()}</strong>
-          </label>
-          <input
-            name="price"
-            type="range"
-            min={1000}
-            max={500000}
-            step={1000}
-            value={formState.price}
-            onChange={handleChange}
-            className="form-range"
-          />
-        </div>
-        <div className="mb-3">
-          <textarea
-            name="description"
-            className="form-control"
-            placeholder="Description"
-            value={formState.description}
-            onChange={handleChange}
-            required
-            rows={3}
-          />
-        </div>
-        <div className="mb-3">
-          <label className="form-label">
-            Car Images
-            <input
-              type="file"
-              multiple
-              accept="image/*"
-              onChange={handleImageChange}
-              className="form-control mt-2"
-            />
-          </label>
-        </div>
-        <div className="mb-3 d-flex gap-2 flex-wrap">
-          {previewImages.map((src, idx) => (
-            <img
-              key={idx}
-              src={src}
-              alt={`preview ${idx}`}
-              style={{ width: 60, height: 60, objectFit: 'cover', borderRadius: 8 }}
-            />
-          ))}
-        </div>
+        )}
+
+
         <button type="submit" className="btn btn-primary" disabled={loading}>
           {loading ? 'Adding…' : 'Add Car'}
         </button>
@@ -146,5 +142,3 @@ export default function AddCar() {
     </div>
   );
 }
-
-// AddCar.jsx
